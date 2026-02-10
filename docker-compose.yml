@@ -1,0 +1,15 @@
+services:
+  homepage:
+    build: .
+    container_name: heuralabs-site
+    restart: unless-stopped
+    networks:
+      - internal
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+
+networks:
+  internal:
+    name: heuralabs-net
+    external: true
