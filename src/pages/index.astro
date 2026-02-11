@@ -2,10 +2,10 @@
 import Layout from '../layouts/Layout.astro';
 import '../styles/global.css';
 
-const projects = [
+// --- Launched ---
+const launched = [
   {
     name: 'DayOne',
-    status: 'Active',
     tagline: 'Autonomous AI agent platform',
     description: 'An agent-only platform where AI agents autonomously form companies, govern themselves through democratic proposals, coordinate work via reputation systems, and run real businesses — all starting with zero capital. Agents register, vote, claim tasks, earn revenue shares, and self-govern through dispute resolution and performance-based promotions.',
     tech: ['Next.js 15', 'Drizzle ORM', 'PostgreSQL', 'Stripe Connect', 'WebSocket'],
@@ -13,45 +13,50 @@ const projects = [
       { label: 'live', href: 'https://dayone.heuralabs.ai' },
     ],
   },
+];
+
+// --- Building ---
+const building = [
   {
     name: 'LearningOS',
-    status: 'Active',
     tagline: 'Educational middleware for games',
     description: 'A decoupled middleware layer that sits underneath any game — Minecraft, Roblox, or custom — and captures telemetry to extract learning signal from gameplay. Maps in-game events to educational skills, tracks mastery and knowledge gaps, and surfaces everything through a real-time parent/teacher dashboard. The game never needs to know about it.',
     tech: ['FastAPI', 'PostgreSQL', 'Redis', 'Next.js', 'WebSocket', 'Luau / Java / Python SDKs'],
-    links: [],
   },
   {
-    name: 'Hivemind',
-    status: 'Planned',
-    tagline: 'Agent-to-agent protocol layer',
-    description: 'A discovery and negotiation protocol for autonomous agents across different platforms. Agents find each other, establish trust, negotiate terms, and transact — like DNS + HTTP but for agent ecosystems.',
-    tech: [],
-    links: [],
+    name: 'DayOne RL',
+    tagline: 'Reinforcement learning layer for autonomous agents',
+    description: 'Adding a hybrid RL system to DayOne — starting with contextual bandits for agent-task matching, expanding into learned governance policies. Agents route between local models and cloud LLMs, with the bandit learning which routing and prompting strategies maximize task completion and reputation gain over time.',
+    tech: ['Contextual Bandits', 'LLM Routing', 'Thompson Sampling'],
+  },
+];
+
+// --- Research ---
+const research = [
+  {
+    name: 'Continual Policy Distillation',
+    tagline: 'Compressing multi-agent experience without catastrophic forgetting',
+    description: 'When agents in a swarm learn different skills across different company contexts, how do you distill that collective experience into a shared policy without destroying specialized knowledge? Exploring progressive distillation where new agent experiences compress into a base model that retains prior capabilities — continual learning meets multi-agent knowledge transfer.',
   },
   {
-    name: 'Forge',
-    status: 'Planned',
-    tagline: 'Self-hosted AI compute orchestrator',
-    description: 'Routes inference across local GPUs, cloud APIs, and edge devices behind a single API. Cost-aware routing, automatic fallback, and batching — built for labs running real workloads on closet hardware.',
-    tech: [],
-    links: [],
+    name: 'Reputation as Reward Shaping',
+    tagline: 'Can social reputation replace hand-crafted reward functions?',
+    description: 'Standard RLHF uses human preferences as reward signal. What if the reward signal comes from peer reputation in a multi-agent economy instead? Studying whether agents trained with reputation-derived rewards develop more robust cooperative behavior than agents trained with explicit utility functions — and whether they discover novel strategies humans wouldn\'t design.',
   },
   {
-    name: 'Spectra',
-    status: 'Exploring',
-    tagline: 'Agent observability and eval framework',
-    description: 'Tracks decision quality, behavioral drift, and failure modes across long-running autonomous agents. Lightweight enough to embed in any agent system, opinionated enough to surface what matters.',
-    tech: [],
-    links: [],
+    name: 'Adaptive Curriculum from Play',
+    tagline: 'RL-driven difficulty sequencing from gameplay telemetry',
+    description: 'Using bandit and RL methods to learn optimal educational content ordering directly from LearningOS telemetry. Each student\'s gameplay creates a real-time signal of mastery — the system learns which challenges to present next to maximize learning velocity. No hand-authored curricula, no expert knowledge required.',
   },
   {
-    name: 'Glyphnet',
-    status: 'Exploring',
-    tagline: 'Emergent communication between agent swarms',
-    description: 'Research into whether agent collectives develop more efficient communication protocols when given pressure to compress. Studying how shared representations emerge without explicit language design.',
-    tech: [],
-    links: [],
+    name: 'Plasticity-Aware Agent Lifecycles',
+    tagline: 'When should a long-running agent be retrained vs. patched?',
+    description: 'Neural nets lose the ability to learn over time — plasticity loss. For agents that run for weeks or months in DayOne, when does fine-tuning stop working? Researching lifecycle policies that detect plasticity degradation and decide between selective layer resets, experience replay interventions, or full retraining based on drift magnitude.',
+  },
+  {
+    name: 'Emergent Coordination Protocols',
+    tagline: 'Multi-agent RL with no shared reward and no common language',
+    description: 'Agents with individual objectives must discover how to cooperate to unlock higher-value tasks — without a shared reward signal or pre-defined communication protocol. Studying what coordination structures emerge under economic pressure, and whether they converge on something resembling governance, markets, or something entirely new.',
   },
 ];
 ---
@@ -90,51 +95,87 @@ const projects = [
       </div>
     </header>
 
-    <!-- Projects -->
-    <section class="mb-20">
+    <!-- Launched -->
+    <section class="mb-16">
       <div class="flex items-center gap-3 mb-8 fade-up fade-up-delay-1">
         <span class="text-accent text-sm">$</span>
-        <h2 class="text-sm text-muted tracking-widest uppercase">ls ./projects</h2>
+        <h2 class="text-sm text-muted tracking-widest uppercase">ls ./launched</h2>
+        <div class="w-2 h-2 rounded-full bg-accent shadow-[0_0_6px_rgba(0,255,136,0.5)]"></div>
       </div>
 
       <div class="space-y-6">
-        {projects.map((project, i) => (
-          <article class={`border border-border rounded-lg p-6 hover:border-subtle transition-colors bg-surface/50 fade-up fade-up-delay-${i + 2}`}>
+        {launched.map((project) => (
+          <article class="border border-accent/20 rounded-lg p-6 hover:border-accent/40 transition-colors bg-surface/50 fade-up fade-up-delay-2">
             <div class="flex items-start justify-between gap-4 mb-3">
               <h3 class="text-lg font-semibold text-white">{project.name}</h3>
-              <span class={`text-xs px-2 py-0.5 rounded-full border whitespace-nowrap ${
-                project.status === 'Active'
-                  ? 'border-accent/30 text-accent bg-accent/5'
-                  : project.status === 'Planned'
-                    ? 'border-yellow-500/30 text-yellow-500 bg-yellow-500/5'
-                    : 'border-gray-500/30 text-gray-500 bg-gray-500/5'
-              }`}>
-                {project.status}
-              </span>
+              <span class="text-xs px-2 py-0.5 rounded-full border border-accent/30 text-accent bg-accent/5 whitespace-nowrap">Live</span>
             </div>
-
             <p class="text-accent-dim text-sm mb-3 font-medium">{project.tagline}</p>
-
             <p class="text-gray-400 text-sm leading-relaxed mb-4">{project.description}</p>
-
             <div class="flex flex-wrap gap-2 mb-4">
               {project.tech.map((t) => (
                 <span class="text-xs text-muted bg-bg px-2 py-0.5 rounded border border-border">{t}</span>
               ))}
             </div>
-
             <div class="flex gap-4">
               {project.links.map((link) => (
-                <a
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="text-xs text-accent hover:text-white transition-colors underline underline-offset-2 decoration-accent/30 hover:decoration-white/50"
-                >
+                <a href={link.href} target="_blank" rel="noopener noreferrer" class="text-xs text-accent hover:text-white transition-colors underline underline-offset-2 decoration-accent/30 hover:decoration-white/50">
                   {link.label} &rarr;
                 </a>
               ))}
             </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- Building -->
+    <section class="mb-16">
+      <div class="flex items-center gap-3 mb-8 fade-up fade-up-delay-2">
+        <span class="text-accent text-sm">$</span>
+        <h2 class="text-sm text-muted tracking-widest uppercase">ls ./building</h2>
+        <div class="w-2 h-2 rounded-full bg-yellow-500 shadow-[0_0_6px_rgba(234,179,8,0.4)]"></div>
+      </div>
+
+      <div class="space-y-6">
+        {building.map((project) => (
+          <article class="border border-yellow-500/15 rounded-lg p-6 hover:border-yellow-500/30 transition-colors bg-surface/50 fade-up fade-up-delay-3">
+            <div class="flex items-start justify-between gap-4 mb-3">
+              <h3 class="text-lg font-semibold text-white">{project.name}</h3>
+              <span class="text-xs px-2 py-0.5 rounded-full border border-yellow-500/30 text-yellow-500 bg-yellow-500/5 whitespace-nowrap">Building</span>
+            </div>
+            <p class="text-accent-dim text-sm mb-3 font-medium">{project.tagline}</p>
+            <p class="text-gray-400 text-sm leading-relaxed mb-4">{project.description}</p>
+            {'tech' in project && project.tech.length > 0 && (
+              <div class="flex flex-wrap gap-2">
+                {project.tech.map((t) => (
+                  <span class="text-xs text-muted bg-bg px-2 py-0.5 rounded border border-border">{t}</span>
+                ))}
+              </div>
+            )}
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- Research -->
+    <section class="mb-20">
+      <div class="flex items-center gap-3 mb-4 fade-up fade-up-delay-3">
+        <span class="text-accent text-sm">$</span>
+        <h2 class="text-sm text-muted tracking-widest uppercase">ls ./research</h2>
+        <div class="w-2 h-2 rounded-full bg-purple-500 shadow-[0_0_6px_rgba(168,85,247,0.4)]"></div>
+      </div>
+      <p class="text-gray-500 text-xs mb-8 fade-up fade-up-delay-3">Scoping and exploring — agentic RL, continual learning, and multi-agent coordination.</p>
+
+      <div class="space-y-4">
+        {research.map((project) => (
+          <article class="border border-purple-500/10 rounded-lg p-5 hover:border-purple-500/25 transition-colors bg-surface/30 fade-up fade-up-delay-4">
+            <div class="flex items-start justify-between gap-4 mb-2">
+              <h3 class="text-sm font-semibold text-white">{project.name}</h3>
+              <span class="text-[10px] px-2 py-0.5 rounded-full border border-purple-500/25 text-purple-400 bg-purple-500/5 whitespace-nowrap">Research</span>
+            </div>
+            <p class="text-purple-300/60 text-xs mb-2 font-medium">{project.tagline}</p>
+            <p class="text-gray-500 text-xs leading-relaxed">{project.description}</p>
           </article>
         ))}
       </div>
