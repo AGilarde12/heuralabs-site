@@ -188,8 +188,9 @@ const projects = [
     const canvas = document.getElementById('particles') as HTMLCanvasElement;
     const ctx = canvas.getContext('2d')!;
     let particles: { x: number; y: number; vx: number; vy: number }[] = [];
-    const CONNECT_DIST = 120;
-    const PARTICLE_COUNT = 60;
+    const isMobile = window.innerWidth < 768;
+    const CONNECT_DIST = isMobile ? 80 : 120;
+    const PARTICLE_COUNT = isMobile ? 20 : 60;
 
     function spawnParticles() {
       particles = [];
@@ -268,10 +269,10 @@ const projects = [
     // === Terminal Boot Sequence (full-screen overlay) ===
     const bootLines = [
       { text: '> initializing heuralabs kernel...', delay: 0 },
-      { text: '> loading research modules...', delay: 400 },
-      { text: '> mounting project filesystem...', delay: 800 },
-      { text: '> establishing agent connections...', delay: 1200 },
-      { text: '> all systems online.', delay: 1700, accent: true },
+      { text: '> loading research modules...', delay: 250 },
+      { text: '> mounting project filesystem...', delay: 500 },
+      { text: '> establishing agent connections...', delay: 750 },
+      { text: '> all systems online.', delay: 1050, accent: true },
     ];
 
     const overlay = document.getElementById('boot-overlay')!;
@@ -294,10 +295,10 @@ const projects = [
       overlay.style.pointerEvents = 'none';
       mainContent.style.transition = 'opacity 0.6s ease';
       mainContent.style.opacity = '1';
-    }, 2600);
+    }, 1700);
 
     setTimeout(() => {
       overlay.remove();
-    }, 3200);
+    }, 2300);
   </script>
 </Layout>
