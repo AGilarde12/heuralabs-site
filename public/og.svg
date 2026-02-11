@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0a0a0a"/>
+  <!-- Grid lines -->
+  <defs>
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <!-- Status dot -->
+  <circle cx="100" cy="270" r="6" fill="#00ff88" opacity="0.8"/>
+  <!-- Title -->
+  <text x="100" y="330" font-family="monospace" font-size="64" font-weight="bold" fill="white">heuralabs<tspan fill="#00ff88">.</tspan>ai</text>
+  <!-- Tagline -->
+  <text x="100" y="380" font-family="monospace" font-size="22" fill="#888888">Solo AI research lab</text>
+  <!-- Tags -->
+  <text x="100" y="430" font-family="monospace" font-size="16" fill="#444444">autonomous agents · educational AI · systems research</text>
+</svg>

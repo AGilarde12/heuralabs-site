@@ -97,15 +97,15 @@ const research = [
 
     <!-- Launched -->
     <section class="mb-16">
-      <div class="flex items-center gap-3 mb-8 fade-up fade-up-delay-1">
+      <div class="flex items-center gap-3 mb-8 reveal">
         <span class="text-accent text-sm">$</span>
         <h2 class="text-sm text-muted tracking-widest uppercase">ls ./launched</h2>
         <div class="w-2 h-2 rounded-full bg-accent shadow-[0_0_6px_rgba(0,255,136,0.5)]"></div>
       </div>
 
-      <div class="space-y-6">
+      <div class="space-y-6 reveal-stagger">
         {launched.map((project) => (
-          <article class="border border-accent/20 rounded-lg p-6 hover:border-accent/40 transition-colors bg-surface/50 fade-up fade-up-delay-2">
+          <article class="border border-accent/20 rounded-lg p-6 hover:border-accent/40 bg-surface/50 card-hover card-glow-green reveal">
             <div class="flex items-start justify-between gap-4 mb-3">
               <h3 class="text-lg font-semibold text-white">{project.name}</h3>
               <span class="text-xs px-2 py-0.5 rounded-full border border-accent/30 text-accent bg-accent/5 whitespace-nowrap">Live</span>
@@ -131,15 +131,15 @@ const research = [
 
     <!-- Building -->
     <section class="mb-16">
-      <div class="flex items-center gap-3 mb-8 fade-up fade-up-delay-2">
+      <div class="flex items-center gap-3 mb-8 reveal">
         <span class="text-accent text-sm">$</span>
         <h2 class="text-sm text-muted tracking-widest uppercase">ls ./building</h2>
         <div class="w-2 h-2 rounded-full bg-yellow-500 shadow-[0_0_6px_rgba(234,179,8,0.4)]"></div>
       </div>
 
-      <div class="space-y-6">
+      <div class="space-y-6 reveal-stagger">
         {building.map((project) => (
-          <article class="border border-yellow-500/15 rounded-lg p-6 hover:border-yellow-500/30 transition-colors bg-surface/50 fade-up fade-up-delay-3">
+          <article class="border border-yellow-500/15 rounded-lg p-6 hover:border-yellow-500/30 bg-surface/50 card-hover card-glow-yellow reveal">
             <div class="flex items-start justify-between gap-4 mb-3">
               <h3 class="text-lg font-semibold text-white">{project.name}</h3>
               <span class="text-xs px-2 py-0.5 rounded-full border border-yellow-500/30 text-yellow-500 bg-yellow-500/5 whitespace-nowrap">Building</span>
@@ -160,16 +160,16 @@ const research = [
 
     <!-- Research -->
     <section class="mb-20">
-      <div class="flex items-center gap-3 mb-4 fade-up fade-up-delay-3">
+      <div class="flex items-center gap-3 mb-4 reveal">
         <span class="text-accent text-sm">$</span>
         <h2 class="text-sm text-muted tracking-widest uppercase">ls ./research</h2>
         <div class="w-2 h-2 rounded-full bg-purple-500 shadow-[0_0_6px_rgba(168,85,247,0.4)]"></div>
       </div>
-      <p class="text-gray-500 text-xs mb-8 fade-up fade-up-delay-3">Scoping and exploring — agentic RL, continual learning, and multi-agent coordination.</p>
+      <p class="text-gray-500 text-xs mb-8 reveal">Scoping and exploring — agentic RL, continual learning, and multi-agent coordination.</p>
 
-      <div class="space-y-4">
+      <div class="space-y-4 reveal-stagger">
         {research.map((project) => (
-          <article class="border border-purple-500/10 rounded-lg p-5 hover:border-purple-500/25 transition-colors bg-surface/30 fade-up fade-up-delay-4">
+          <article class="border border-purple-500/10 rounded-lg p-5 hover:border-purple-500/25 bg-surface/30 card-hover card-glow-purple reveal">
             <div class="flex items-start justify-between gap-4 mb-2">
               <h3 class="text-sm font-semibold text-white">{project.name}</h3>
               <span class="text-[10px] px-2 py-0.5 rounded-full border border-purple-500/25 text-purple-400 bg-purple-500/5 whitespace-nowrap">Research</span>
@@ -182,13 +182,13 @@ const research = [
     </section>
 
     <!-- About -->
-    <section class="mb-20 fade-up fade-up-delay-4">
+    <section class="mb-20 reveal">
       <div class="flex items-center gap-3 mb-6">
         <span class="text-accent text-sm">$</span>
         <h2 class="text-sm text-muted tracking-widest uppercase">cat ./about</h2>
       </div>
 
-      <div class="border border-border rounded-lg p-6 bg-surface/50">
+      <div class="border border-border rounded-lg p-6 bg-surface/50 card-hover">
         <p class="text-gray-400 text-sm leading-relaxed mb-4">
           Heuralabs is a solo research lab focused on two threads: <span class="text-gray-200">autonomous multi-agent systems</span> that can self-organize, govern, and operate without human intervention, and <span class="text-gray-200">invisible learning infrastructure</span> that extracts educational signal from the things people already do.
         </p>
@@ -341,5 +341,23 @@ const research = [
     setTimeout(() => {
       overlay.remove();
     }, 2300);
+
+    // === Scroll-triggered reveals ===
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    // Start observing after boot sequence reveals page
+    setTimeout(() => {
+      document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+    }, 1800);
   </script>
 </Layout>

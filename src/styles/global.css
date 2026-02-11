@@ -55,21 +55,41 @@
   text-shadow: 0 0 10px rgba(0, 255, 136, 0.3), 0 0 40px rgba(0, 255, 136, 0.1);
 }
 
-/* Subtle fade-in */
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Scroll-triggered reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
 }
-.fade-up {
-  animation: fadeUp 0.6s ease-out both;
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
-.fade-up-delay-1 { animation-delay: 0.1s; }
-.fade-up-delay-2 { animation-delay: 0.2s; }
-.fade-up-delay-3 { animation-delay: 0.3s; }
-.fade-up-delay-4 { animation-delay: 0.4s; }
+
+/* Staggered children */
+.reveal-stagger > .reveal:nth-child(1) { transition-delay: 0s; }
+.reveal-stagger > .reveal:nth-child(2) { transition-delay: 0.08s; }
+.reveal-stagger > .reveal:nth-child(3) { transition-delay: 0.16s; }
+.reveal-stagger > .reveal:nth-child(4) { transition-delay: 0.24s; }
+.reveal-stagger > .reveal:nth-child(5) { transition-delay: 0.32s; }
+.reveal-stagger > .reveal:nth-child(6) { transition-delay: 0.4s; }
+
+/* Card hover — glow + lift */
+.card-hover {
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.03);
+}
+
+/* Section-specific hover glows */
+.card-glow-green:hover {
+  box-shadow: 0 4px 24px rgba(0, 255, 136, 0.06), 0 0 0 1px rgba(0, 255, 136, 0.1);
+}
+.card-glow-yellow:hover {
+  box-shadow: 0 4px 24px rgba(234, 179, 8, 0.06), 0 0 0 1px rgba(234, 179, 8, 0.1);
+}
+.card-glow-purple:hover {
+  box-shadow: 0 4px 24px rgba(168, 85, 247, 0.06), 0 0 0 1px rgba(168, 85, 247, 0.1);
+}
