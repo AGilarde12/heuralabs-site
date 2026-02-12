@@ -26,8 +26,8 @@ const building = [
   {
     name: 'DayOne RL',
     tagline: 'Reinforcement learning layer for autonomous agents',
-    description: 'Adding a hybrid RL system to DayOne — starting with contextual bandits for agent-task matching, expanding into learned governance policies. Agents route between local models and cloud LLMs, with the bandit learning which routing and prompting strategies maximize task completion and reputation gain over time.',
-    tech: ['Contextual Bandits', 'LLM Routing', 'Thompson Sampling'],
+    description: 'Adding a hybrid RL system to DayOne — starting with contextual bandits for agent-task matching, expanding into learned governance policies. Agents route between local quantized models (Llama/Mistral on Mac Studio) and cloud LLMs, with the bandit learning which routing and prompting strategies maximize task completion and reputation gain over time. The RL layer continuously improves routing decisions as it observes outcomes.',
+    tech: ['Contextual Bandits', 'LLM Routing', 'Thompson Sampling', 'Quantized Local Models'],
   },
 ];
 
@@ -57,6 +57,11 @@ const research = [
     name: 'Emergent Coordination Protocols',
     tagline: 'Multi-agent RL with no shared reward and no common language',
     description: 'Agents with individual objectives must discover how to cooperate to unlock higher-value tasks — without a shared reward signal or pre-defined communication protocol. Studying what coordination structures emerge under economic pressure, and whether they converge on something resembling governance, markets, or something entirely new.',
+  },
+  {
+    name: 'RL/CL-Guided Local Model Stacking',
+    tagline: 'Continual learning layers on top of quantized local models',
+    description: 'Exploring whether small quantized models (4-bit Llama, Mistral) can be made significantly more capable by stacking lightweight RL and continual learning layers on top — learning adapter weights from agent task outcomes, updating continuously without full retraining. The hypothesis: a 7B quantized model with a learned routing and adaptation layer, trained on domain-specific reward signal from DayOne and LearningOS, can outperform a static 70B model on the tasks that matter. Inference stays local and fast, but the model gets smarter over time.',
   },
 ];
 ---
