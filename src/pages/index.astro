@@ -234,7 +234,7 @@ const research = [
     <!-- Terminal Easter Egg -->
     <div id="terminal" class="terminal-popup">
       <div class="bg-bg border-t border-accent/30 p-4 max-w-3xl mx-auto">
-        <div id="terminal-output" class="text-xs text-gray-400 mb-2 max-h-32 overflow-y-auto"></div>
+        <div id="terminal-output" class="text-xs text-gray-400 mb-2 max-h-64 overflow-y-auto whitespace-pre-wrap"></div>
         <div class="flex items-center gap-2 text-xs">
           <span class="text-accent">guest@heuralabs:~$</span>
           <input type="text" id="terminal-input" class="terminal-input text-xs" autocomplete="off" spellcheck="false" />
@@ -469,20 +469,203 @@ const research = [
     const termInput = document.getElementById('terminal-input') as HTMLInputElement;
     const termOutput = document.getElementById('terminal-output')!;
     let termOpen = false;
+    const cmdHistory: string[] = [];
+    let historyIndex = -1;
 
-    const responses: Record<string, string> = {
-      help: 'available commands: help, about, projects, stack, contact, ping, clear, exit',
-      about: 'solo AI research lab. autonomous agents + learning infrastructure. mac mini in a closet.',
-      projects: 'dayone (live) · learningos (building) · dayone-rl (building) · 6 research threads active',
-      stack: 'next.js · fastapi · postgres · redis · astro · tailwind · docker · cloudflare tunnels · quantized llms',
-      contact: 'alec@heuralabs.ai',
-      ping: 'pong. latency: 0.42ms (it\'s localhost)',
-      clear: '__CLEAR__',
-      exit: '__EXIT__',
-    };
+    // Lab start date for uptime calc
+    const LAB_START = new Date('2024-11-01');
+
+    const fortunes = [
+      'the best reward function is the one you don\'t have to write.',
+      'if your agents need a manual, they\'re not autonomous.',
+      'plasticity loss is just forgetting with a PhD.',
+      'the model doesn\'t need to be bigger. it needs to be smarter about what it already knows.',
+      'multi-agent coordination is just politics with gradient descent.',
+      'ship first, theorize later.',
+      'a 7B model that learns > a 70B model that doesn\'t.',
+      'the closet data center is a feature, not a bug.',
+      'if the agents vote to fire you, you\'ve succeeded.',
+      'localhost is the most reliable cloud provider.',
+      'reward shaping is just bribery with math.',
+      'continual learning: because catastrophic forgetting is not a personality trait.',
+    ];
+
+    const neofetchArt = [
+      '        <span class="text-accent">._____.</span>        <span class="text-white">guest</span>@<span class="text-accent">heuralabs</span>',
+      '       <span class="text-accent">/       \\</span>       ──────────────',
+      '      <span class="text-accent">|  H.    |</span>      <span class="text-accent">OS:</span> macOS (Mac Mini M2)',
+      '      <span class="text-accent">|        |</span>      <span class="text-accent">Host:</span> closet rack, ambient 28°C',
+      '       <span class="text-accent">\\_____/</span>       <span class="text-accent">Uptime:</span> __UPTIME__',
+      '                         <span class="text-accent">Projects:</span> 3 active, 6 research threads',
+      '  <span class="text-accent">heuralabs.ai</span>         <span class="text-accent">Stack:</span> next.js, fastapi, postgres, redis',
+      '                         <span class="text-accent">Infra:</span> docker, cloudflare tunnels',
+      '                         <span class="text-accent">Models:</span> llama 3, mistral (4-bit quantized)',
+      '                         <span class="text-accent">GPU:</span> none. cpu inference gang.',
+      '                         <span class="text-accent">Funding:</span> $0 raised, $0 needed',
+    ];
+
+    const topProcesses = [
+      '  PID  CPU%  MEM%  PROCESS',
+      '    1  12.3   4.2  dayone-agent-orchestrator',
+      '    2   8.7   6.1  bandit-training-loop',
+      '    3   6.4   3.8  learningos-telemetry-ingest',
+      '    4   4.1   2.9  reputation-reward-shaper',
+      '    5   3.2   1.7  agent-task-matcher (linucb)',
+      '    6   2.8   8.4  llm-router (local/cloud)',
+      '    7   1.9   1.2  curriculum-optimizer',
+      '    8   0.4   0.3  cron-scheduler',
+      '    9   0.1   0.1  this-terminal',
+    ];
+
+    const historyTimeline = [
+      '  2024-11  lab founded. mac mini acquired. closet converted.',
+      '  2024-12  dayone v0 — first autonomous agent platform prototype',
+      '  2025-01  agents form companies, vote on proposals, earn revenue',
+      '  2025-02  learningos — gameplay telemetry → educational tracking',
+      '  2025-03  stripe connect integration. agents handle real money.',
+      '  2025-05  reputation system + democratic governance live',
+      '  2025-08  heuralabs.ai launched',
+      '  2025-10  contextual bandit sidecar for agent-task matching',
+      '  2025-12  local quantized model routing (llama/mistral)',
+      '  2026-01  rl/cl research threads started',
+      '  2026-02  you are here._',
+    ];
+
+    function getUptime(): string {
+      const now = new Date();
+      const diff = now.getTime() - LAB_START.getTime();
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const months = Math.floor(days / 30);
+      const remDays = days % 30;
+      return `${months} months, ${remDays} days`;
+    }
+
+    function handleCommand(raw: string): string | null {
+      const cmd = raw.trim().toLowerCase();
+      const parts = cmd.split(/\s+/);
+      const base = parts[0];
+
+      // Special commands
+      if (base === 'clear') return '__CLEAR__';
+      if (base === 'exit' || base === 'quit' || base === 'q') return '__EXIT__';
+
+      // Static responses
+      const statics: Record<string, string> = {
+        help: 'commands: help, about, projects, stack, contact, ping, whoami, uptime, neofetch, top, sudo, fortune, history, ls, cat, ssh, rm, echo, date, man, cowsay, matrix, curl, wget, vim, emacs, git, make, clear, exit',
+        about: 'solo AI research lab. autonomous agents + learning infrastructure. one person. one mac mini. one closet.',
+        projects: '<span class="text-accent">●</span> dayone <span class="text-muted">(live)</span> · <span class="text-yellow-500">●</span> learningos <span class="text-muted">(building)</span> · <span class="text-yellow-500">●</span> dayone-rl <span class="text-muted">(building)</span> · <span class="text-purple-400">●</span> 6 research threads',
+        stack: 'next.js · fastapi · drizzle · postgres · redis · astro · tailwind · docker · cloudflare tunnels · quantized llms (llama 3, mistral)',
+        contact: '<a href="mailto:alec@heuralabs.ai" class="text-accent underline">alec@heuralabs.ai</a>',
+        ping: 'pong. latency: ' + (Math.random() * 2).toFixed(2) + 'ms (it\'s localhost)',
+        whoami: 'guest@heuralabs — observer mode. agents have root.',
+        date: new Date().toUTCString(),
+        uptime: 'heuralabs has been running for ' + getUptime() + '. no reboots. no regrets.',
+        vim: 'why would you do this to yourself. (use :q! to exit your life choices)',
+        emacs: 'M-x butterfly. also no.',
+        make: 'make: *** No targets specified. try \'make agents-smarter\'. Stop.',
+        git: 'on branch: main. ' + Math.floor(Math.random() * 40 + 60) + ' commits ahead of \'giving up\'.',
+        matrix: 'you\'re already in it. the agents are watching.',
+        cowsay: ' _______________\n< moo. >\n ---------------\n        \\   ^__^\n         \\  (oo)\\_______\n            (__)\\       )\\/\\\n                ||----w |\n                ||     ||',
+      };
+
+      if (statics[base]) return statics[base];
+
+      // Dynamic commands
+      if (base === 'sudo') {
+        if (parts.length > 1) return 'nice try. agents have root, you don\'t.';
+        return 'usage: sudo <command>. (it won\'t work though.)';
+      }
+
+      if (base === 'ssh') {
+        const target = parts[1] || 'agents';
+        if (target === 'agents' || target === 'agent') return 'connection refused — agents are autonomous, they don\'t take commands.';
+        if (target === 'bandit') return 'connection refused — the bandit is busy exploring. try again in ε iterations.';
+        if (target === 'root') return 'permission denied. the agents voted against it.';
+        return `ssh: could not resolve hostname \'${target}\': nodename nor servname provided`;
+      }
+
+      if (base === 'rm') {
+        if (cmd.includes('-rf')) return 'permission denied. also, why.';
+        return 'rm: refusing to remove. everything here is load-bearing.';
+      }
+
+      if (base === 'ls') {
+        const dir = parts[1] || '.';
+        if (dir === '.' || dir === '~' || dir === '/') return 'launched/  building/  research/  now.txt  .env  .secret-sauce';
+        if (dir === 'launched' || dir === 'launched/') return 'dayone/';
+        if (dir === 'building' || dir === 'building/') return 'learningos/  dayone-rl/';
+        if (dir === 'research' || dir === 'research/') return 'continual-policy-distillation/  reputation-reward-shaping/\nadaptive-curriculum/  plasticity-lifecycles/\nemergent-coordination/  local-model-stacking/';
+        if (dir === '.secret-sauce') return 'ls: .secret-sauce: Permission denied';
+        return `ls: ${dir}: No such file or directory`;
+      }
+
+      if (base === 'cat') {
+        const file = parts[1] || '';
+        if (file === '.env') return 'nice try. no secrets for you.';
+        if (file === '.secret-sauce') return 'cat: .secret-sauce: Permission denied. (it\'s just coffee and stubbornness.)';
+        if (file === 'now.txt') return '▸ bandit training loop\n▸ learningos websocket feeds\n▸ reading about plasticity loss in continual RL';
+        if (file === '/etc/motd' || file === 'motd') return 'welcome to heuralabs. the agents are in charge now.';
+        if (!file) return 'cat: missing operand. try: cat now.txt';
+        return `cat: ${file}: No such file or directory`;
+      }
+
+      if (base === 'echo') {
+        const msg = raw.trim().slice(5);
+        if (!msg) return '';
+        if (msg.includes('$PATH')) return '/usr/local/bin:/agents/bin:/research/bin:/closet/rack';
+        if (msg.includes('$HOME')) return '/home/heuralabs';
+        return msg;
+      }
+
+      if (base === 'curl' || base === 'wget') {
+        return '< 200 OK >\n{ "status": "operational", "agents": 42, "uptime": "' + getUptime() + '", "coffee_level": "low" }';
+      }
+
+      if (base === 'man') {
+        const page = parts[1] || '';
+        if (!page) return 'what manual page do you want?\ntry: man heuralabs';
+        if (page === 'heuralabs') return 'HEURALABS(1)\n\nNAME\n  heuralabs — solo AI research lab\n\nSYNOPSIS\n  one person, autonomous agents, zero funding\n\nDESCRIPTION\n  builds systems that get smarter over time.\n  see also: stubbornness(7), caffeine(3)';
+        return `No manual entry for ${page}`;
+      }
+
+      if (base === 'neofetch') {
+        return neofetchArt.join('\n').replace('__UPTIME__', getUptime());
+      }
+
+      if (base === 'top' || base === 'htop') {
+        return topProcesses.join('\n');
+      }
+
+      if (base === 'fortune') {
+        return fortunes[Math.floor(Math.random() * fortunes.length)];
+      }
+
+      if (base === 'history') {
+        return historyTimeline.join('\n');
+      }
+
+      if (base === 'pwd') return '/home/heuralabs';
+      if (base === 'hostname') return 'heuralabs-mini.local';
+      if (base === 'uname') return 'HeuralabsOS 1.0.0 arm64';
+      if (base === 'df') return 'Filesystem      Size  Used  Avail  Use%\n/dev/closet     2TB   1.2TB  800GB  60%\n/dev/brain      ∞     87%    13%    87%';
+      if (base === 'free') return '              total    used    free\nMem:          16GB     14GB    2GB\nSwap:         0GB      0GB     0GB\nCoffee:       ∞        high    low';
+      if (base === 'ps') return '  PID  CMD\n    1  init (heuralabs)\n    2  agent-orchestrator\n    3  research-daemon\n    4  coffee-monitor\n    5  this-shell';
+      if (base === 'id') return 'uid=1000(guest) gid=1000(visitors) groups=1000(visitors),0(observers)';
+      if (base === 'w' || base === 'who') return 'guest    terminal  ' + new Date().toLocaleTimeString() + '  (you)\nalec     closet    always                (never leaves)';
+      if (base === 'yes') return 'yes yes yes yes yes yes yes yes (you get the idea)';
+      if (base === 'no') return 'that\'s the spirit.';
+      if (base === 'hello' || base === 'hi' || base === 'hey') return 'hey. type \'help\' to see what you can do here.';
+      if (base === 'thanks' || base === 'thank') return 'you\'re welcome. the agents appreciate it too.';
+      if (base === '42') return 'correct. but what was the question?';
+      if (base === 'hack') return 'lol. the agents have already considered that scenario.';
+      if (base === 'bitcoin' || base === 'crypto') return 'the agents considered it. they voted no.';
+      if (base === 'ai') return 'you\'re soaking in it.';
+
+      return `command not found: ${base}. type "help" for available commands.`;
+    }
 
     document.addEventListener('keydown', (e) => {
-      if (e.key === '`' && !termOpen) {
+      if (e.key === '`' && !termOpen && !(e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement)) {
         e.preventDefault();
         termOpen = true;
         terminal.classList.add('open');
@@ -495,25 +678,49 @@ const research = [
     });
 
     termInput.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (cmdHistory.length > 0 && historyIndex < cmdHistory.length - 1) {
+          historyIndex++;
+          termInput.value = cmdHistory[cmdHistory.length - 1 - historyIndex];
+        }
+        return;
+      }
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (historyIndex > 0) {
+          historyIndex--;
+          termInput.value = cmdHistory[cmdHistory.length - 1 - historyIndex];
+        } else {
+          historyIndex = -1;
+          termInput.value = '';
+        }
+        return;
+      }
       if (e.key === 'Enter') {
-        const cmd = termInput.value.trim().toLowerCase();
+        const raw = termInput.value;
+        const cmd = raw.trim().toLowerCase();
         termInput.value = '';
+        historyIndex = -1;
         if (!cmd) return;
 
-        if (cmd === 'clear') {
+        cmdHistory.push(cmd);
+
+        const result = handleCommand(raw);
+
+        if (result === '__CLEAR__') {
           termOutput.innerHTML = '';
           return;
         }
-        if (cmd === 'exit') {
+        if (result === '__EXIT__') {
           termOpen = false;
           terminal.classList.remove('open');
           termInput.blur();
           return;
         }
 
-        const response = responses[cmd] || `command not found: ${cmd}. type "help" for available commands.`;
         const line = document.createElement('div');
-        line.innerHTML = `<span class="text-accent">$</span> ${cmd}<br/><span class="text-gray-500">${response}</span>`;
+        line.innerHTML = `<span class="text-accent">$</span> ${cmd}${result ? '<br/><span class="text-gray-500">' + result + '</span>' : ''}`;
         line.className = 'mb-1';
         termOutput.appendChild(line);
         termOutput.scrollTop = termOutput.scrollHeight;
