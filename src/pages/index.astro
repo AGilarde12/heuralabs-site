@@ -73,35 +73,72 @@ const research = [
     </div>
   </div>
 
+  <!-- Sticky Nav -->
+  <nav id="sticky-nav" class="fixed top-0 left-0 right-0 z-40 bg-bg/80 backdrop-blur-md border-b border-border translate-y-[-100%] transition-transform duration-300">
+    <div class="max-w-3xl mx-auto px-6 py-3 flex items-center justify-between">
+      <span class="text-sm font-semibold text-white">h<span class="text-accent">.</span></span>
+      <div class="flex gap-6 text-xs text-muted">
+        <a href="#about" class="hover:text-accent transition-colors">about</a>
+        <a href="#projects" class="hover:text-accent transition-colors">projects</a>
+        <a href="#research" class="hover:text-accent transition-colors">research</a>
+        <a href="#now" class="hover:text-accent transition-colors">now</a>
+      </div>
+    </div>
+  </nav>
+
   <!-- Particle Canvas -->
   <canvas id="particles" class="fixed inset-0 z-0 pointer-events-none"></canvas>
 
   <div class="relative z-10 max-w-3xl mx-auto px-6 py-16 md:py-24 opacity-0" id="main-content">
 
     <!-- Hero -->
-    <header class="mb-20">
+    <header class="mb-24" id="hero">
       <div class="flex items-center gap-3 mb-6">
         <div class="w-3 h-3 rounded-full bg-accent shadow-[0_0_8px_rgba(0,255,136,0.4)]"></div>
         <span class="text-muted text-xs tracking-widest uppercase">Research Lab</span>
       </div>
 
-      <h1 class="text-4xl md:text-5xl font-bold text-white glow mb-4 leading-tight">
+      <h1 class="text-4xl md:text-6xl font-bold text-white glow mb-6 leading-[1.1]">
         heuralabs<span class="text-accent">.</span>ai
       </h1>
 
-      <p class="text-lg text-gray-400 leading-relaxed max-w-xl">
-        Solo AI research lab building autonomous systems and learning infrastructure.<span class="cursor-blink text-accent ml-0.5">_</span>
+      <p class="text-xl md:text-2xl text-gray-300 leading-relaxed max-w-2xl mb-3">
+        Teaching machines to organize themselves<span class="text-accent">.</span>
+      </p>
+      <p class="text-sm text-gray-500 leading-relaxed max-w-xl">
+        A solo research lab building autonomous agent economies and invisible learning infrastructure. Agents that self-govern, models that improve from their own output, and educational systems that learn from play.<span class="cursor-blink text-accent ml-0.5">_</span>
       </p>
 
-      <div class="mt-6 flex gap-4 text-xs text-muted">
-        <span class="border border-subtle px-2 py-1 rounded">autonomous agents</span>
-        <span class="border border-subtle px-2 py-1 rounded">educational AI</span>
-        <span class="border border-subtle px-2 py-1 rounded">systems research</span>
+      <div class="mt-8 flex flex-wrap gap-3 text-xs text-muted">
+        <span class="border border-subtle px-2.5 py-1.5 rounded">multi-agent RL</span>
+        <span class="border border-subtle px-2.5 py-1.5 rounded">continual learning</span>
+        <span class="border border-subtle px-2.5 py-1.5 rounded">autonomous agents</span>
+        <span class="border border-subtle px-2.5 py-1.5 rounded">educational AI</span>
       </div>
     </header>
 
+    <!-- About (moved up) -->
+    <section class="mb-24 reveal" id="about">
+      <div class="flex items-center gap-3 mb-6">
+        <span class="text-accent text-sm">$</span>
+        <h2 class="text-sm text-muted tracking-widest uppercase">cat ./about</h2>
+      </div>
+
+      <div class="border border-border rounded-lg p-6 md:p-8 bg-surface/50 card-hover">
+        <p class="text-gray-300 text-sm md:text-base leading-relaxed mb-4">
+          Heuralabs is one person with a Mac Mini, a closet full of hardware, and a thesis: <span class="text-white font-medium">the next breakthrough in AI isn't bigger models — it's systems that learn to coordinate, improve from their own experience, and never stop adapting.</span>
+        </p>
+        <p class="text-gray-500 text-sm leading-relaxed">
+          No funding rounds. No pitch decks. Just research, code, and shipping. Everything runs on local infrastructure, every system is designed to get smarter over time.
+        </p>
+      </div>
+    </section>
+
+    <!-- Divider -->
+    <div class="border-t border-border/50 mb-24"></div>
+
     <!-- Launched -->
-    <section class="mb-16">
+    <section class="mb-20" id="projects">
       <div class="flex items-center gap-3 mb-8 reveal">
         <span class="text-accent text-sm">$</span>
         <h2 class="text-sm text-muted tracking-widest uppercase">ls ./launched</h2>
@@ -110,14 +147,14 @@ const research = [
 
       <div class="space-y-6 reveal-stagger">
         {launched.map((project) => (
-          <article class="border border-accent/20 rounded-lg p-6 hover:border-accent/40 bg-surface/50 card-hover card-glow-green reveal">
+          <article class="border border-accent/20 rounded-lg p-6 md:p-8 hover:border-accent/40 bg-surface/50 card-hover card-glow-green reveal">
             <div class="flex items-start justify-between gap-4 mb-3">
-              <h3 class="text-lg font-semibold text-white">{project.name}</h3>
+              <h3 class="text-xl font-semibold text-white">{project.name}</h3>
               <span class="text-xs px-2 py-0.5 rounded-full border border-accent/30 text-accent bg-accent/5 whitespace-nowrap">Live</span>
             </div>
             <p class="text-accent-dim text-sm mb-3 font-medium">{project.tagline}</p>
-            <p class="text-gray-400 text-sm leading-relaxed mb-4">{project.description}</p>
-            <div class="flex flex-wrap gap-2 mb-4">
+            <p class="text-gray-400 text-sm leading-relaxed mb-5">{project.description}</p>
+            <div class="flex flex-wrap gap-2 mb-5">
               {project.tech.map((t) => (
                 <span class="text-xs text-muted bg-bg px-2 py-0.5 rounded border border-border">{t}</span>
               ))}
@@ -135,7 +172,7 @@ const research = [
     </section>
 
     <!-- Building -->
-    <section class="mb-16">
+    <section class="mb-20">
       <div class="flex items-center gap-3 mb-8 reveal">
         <span class="text-accent text-sm">$</span>
         <h2 class="text-sm text-muted tracking-widest uppercase">ls ./building</h2>
@@ -163,8 +200,11 @@ const research = [
       </div>
     </section>
 
+    <!-- Divider -->
+    <div class="border-t border-border/50 mb-24"></div>
+
     <!-- Research -->
-    <section class="mb-20">
+    <section class="mb-24" id="research">
       <div class="flex items-center gap-3 mb-4 reveal">
         <span class="text-accent text-sm">$</span>
         <h2 class="text-sm text-muted tracking-widest uppercase">ls ./research</h2>
@@ -186,42 +226,56 @@ const research = [
       </div>
     </section>
 
-    <!-- About -->
-    <section class="mb-20 reveal">
+    <!-- Now -->
+    <section class="mb-24 reveal" id="now">
       <div class="flex items-center gap-3 mb-6">
         <span class="text-accent text-sm">$</span>
-        <h2 class="text-sm text-muted tracking-widest uppercase">cat ./about</h2>
+        <h2 class="text-sm text-muted tracking-widest uppercase">cat ./now</h2>
+        <span class="text-[10px] text-muted/50 ml-auto">updated feb 2026</span>
       </div>
 
       <div class="border border-border rounded-lg p-6 bg-surface/50 card-hover">
-        <p class="text-gray-400 text-sm leading-relaxed mb-4">
-          Heuralabs is a solo research lab focused on two threads: <span class="text-gray-200">autonomous multi-agent systems</span> that can self-organize, govern, and operate without human intervention, and <span class="text-gray-200">invisible learning infrastructure</span> that extracts educational signal from the things people already do.
-        </p>
-        <p class="text-gray-400 text-sm leading-relaxed">
-          The work runs on a Mac Mini in a closet. No funding rounds, no pitch decks — just research, code, and shipping.
-        </p>
+        <ul class="space-y-3 text-sm text-gray-400">
+          <li class="flex items-start gap-3">
+            <span class="text-accent mt-0.5">&#x25B8;</span>
+            <span>Building the <span class="text-gray-200">contextual bandit</span> for DayOne agent-task matching — LinUCB sidecar, A/B traffic split, first 100 experiences collecting now</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="text-yellow-500 mt-0.5">&#x25B8;</span>
+            <span>Wiring up <span class="text-gray-200">LearningOS</span> quest system with real-time WebSocket feeds to the teacher dashboard</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="text-purple-400 mt-0.5">&#x25B8;</span>
+            <span>Reading up on <span class="text-gray-200">plasticity loss in continual RL</span> — Lyle et al. 2023, exploring whether periodic layer resets work for LLM adapters</span>
+          </li>
+        </ul>
       </div>
     </section>
 
+    <!-- Terminal Easter Egg -->
+    <div id="terminal" class="terminal-popup">
+      <div class="bg-bg border-t border-accent/30 p-4 max-w-3xl mx-auto">
+        <div id="terminal-output" class="text-xs text-gray-400 mb-2 max-h-32 overflow-y-auto"></div>
+        <div class="flex items-center gap-2 text-xs">
+          <span class="text-accent">guest@heuralabs:~$</span>
+          <input type="text" id="terminal-input" class="terminal-input text-xs" autocomplete="off" spellcheck="false" />
+        </div>
+      </div>
+    </div>
+
     <!-- Footer -->
-    <footer class="border-t border-border pt-8 pb-12">
+    <footer class="border-t border-border pt-10 pb-16">
+      <div class="mb-8 reveal">
+        <p class="text-sm text-gray-400 mb-4">Interested in the work?</p>
+        <a href="mailto:alec@heuralabs.ai" class="inline-flex items-center gap-2 text-sm text-accent hover:text-white transition-colors border border-accent/30 hover:border-accent/60 px-4 py-2 rounded-lg card-hover">
+          alec@heuralabs.ai &rarr;
+        </a>
+      </div>
       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-muted">
         <div class="flex items-center gap-4">
-          <a
-            href="https://github.com/heuralabs"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="hover:text-accent transition-colors"
-          >
-            github
-          </a>
+          <a href="https://github.com/heuralabs" target="_blank" rel="noopener noreferrer" class="hover:text-accent transition-colors">github</a>
           <span class="text-subtle">|</span>
-          <a
-            href="mailto:alec@heuralabs.ai"
-            class="hover:text-accent transition-colors"
-          >
-            alec@heuralabs.ai
-          </a>
+          <span>press <kbd class="text-accent/60 border border-subtle px-1 rounded text-[10px]">`</kbd> for terminal</span>
         </div>
         <span>&copy; {new Date().getFullYear()} heuralabs</span>
       </div>
@@ -237,6 +291,19 @@ const research = [
     const isMobile = window.innerWidth < 768;
     const CONNECT_DIST = isMobile ? 80 : 120;
     const PARTICLE_COUNT = isMobile ? 20 : 60;
+    const MOUSE_RADIUS = 150;
+    const MOUSE_FORCE = 0.02;
+    let mouseX = -1000;
+    let mouseY = -1000;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+    document.addEventListener('mouseleave', () => {
+      mouseX = -1000;
+      mouseY = -1000;
+    });
 
     function spawnParticles() {
       particles = [];
@@ -292,6 +359,19 @@ const research = [
 
       // Draw particles
       for (const p of particles) {
+        // Mouse interaction — gentle repel
+        const mdx = p.x - mouseX;
+        const mdy = p.y - mouseY;
+        const mDist = Math.sqrt(mdx * mdx + mdy * mdy);
+        if (mDist < MOUSE_RADIUS && mDist > 0) {
+          const force = (1 - mDist / MOUSE_RADIUS) * MOUSE_FORCE;
+          p.vx += (mdx / mDist) * force;
+          p.vy += (mdy / mDist) * force;
+        }
+        // Dampen velocity
+        p.vx *= 0.99;
+        p.vy *= 0.99;
+
         ctx.beginPath();
         ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);
         ctx.fillStyle = 'rgba(0, 255, 136, 0.3)';
@@ -347,6 +427,46 @@ const research = [
       overlay.remove();
     }, 2300);
 
+    // === Sticky Nav (show after scrolling past hero) ===
+    const stickyNav = document.getElementById('sticky-nav')!;
+    const hero = document.getElementById('hero')!;
+
+    const navObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          stickyNav.style.transform = 'translateY(-100%)';
+        } else {
+          stickyNav.style.transform = 'translateY(0)';
+        }
+      },
+      { threshold: 0, rootMargin: '0px' }
+    );
+    // Start observing hero after boot overlay clears
+    setTimeout(() => navObserver.observe(hero), 1800);
+
+    // Highlight active section in nav
+    const navLinks = stickyNav.querySelectorAll('a[href^="#"]');
+    const sections = Array.from(navLinks).map(link => {
+      const id = link.getAttribute('href')!.slice(1);
+      return { link, el: document.getElementById(id)! };
+    });
+
+    const activeObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const match = sections.find(s => s.el === entry.target);
+          if (match) {
+            if (entry.isIntersecting) {
+              navLinks.forEach(l => l.classList.remove('text-accent'));
+              match.link.classList.add('text-accent');
+            }
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+    setTimeout(() => sections.forEach(s => activeObserver.observe(s.el)), 1800);
+
     // === Scroll-triggered reveals ===
     const observer = new IntersectionObserver(
       (entries) => {
@@ -364,5 +484,61 @@ const research = [
     setTimeout(() => {
       document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
     }, 1800);
+
+    // === Terminal Easter Egg ===
+    const terminal = document.getElementById('terminal')!;
+    const termInput = document.getElementById('terminal-input') as HTMLInputElement;
+    const termOutput = document.getElementById('terminal-output')!;
+    let termOpen = false;
+
+    const responses: Record<string, string> = {
+      help: 'available commands: help, about, projects, stack, contact, ping, clear, exit',
+      about: 'solo AI research lab. autonomous agents + learning infrastructure. mac mini in a closet.',
+      projects: 'dayone (live) · learningos (building) · dayone-rl (building) · 6 research threads active',
+      stack: 'next.js · fastapi · postgres · redis · astro · tailwind · docker · cloudflare tunnels · quantized llms',
+      contact: 'alec@heuralabs.ai',
+      ping: 'pong. latency: 0.42ms (it\'s localhost)',
+      clear: '__CLEAR__',
+      exit: '__EXIT__',
+    };
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '`' && !termOpen) {
+        e.preventDefault();
+        termOpen = true;
+        terminal.classList.add('open');
+        termInput.focus();
+      } else if (e.key === 'Escape' && termOpen) {
+        termOpen = false;
+        terminal.classList.remove('open');
+        termInput.blur();
+      }
+    });
+
+    termInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const cmd = termInput.value.trim().toLowerCase();
+        termInput.value = '';
+        if (!cmd) return;
+
+        if (cmd === 'clear') {
+          termOutput.innerHTML = '';
+          return;
+        }
+        if (cmd === 'exit') {
+          termOpen = false;
+          terminal.classList.remove('open');
+          termInput.blur();
+          return;
+        }
+
+        const response = responses[cmd] || `command not found: ${cmd}. type "help" for available commands.`;
+        const line = document.createElement('div');
+        line.innerHTML = `<span class="text-accent">$</span> ${cmd}<br/><span class="text-gray-500">${response}</span>`;
+        line.className = 'mb-1';
+        termOutput.appendChild(line);
+        termOutput.scrollTop = termOutput.scrollHeight;
+      }
+    });
   </script>
 </Layout>
